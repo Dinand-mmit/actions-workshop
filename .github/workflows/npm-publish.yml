@@ -13,6 +13,13 @@ jobs:
     
     steps:
       - name: log repo name to console
-        run: echo 'Repsoitory name = $GITHUB_REPOSITORY'
-        
-        
+        run: echo 'Repsoitory name  $GITHUB_REPOSITORY'
+      
+      - uses: action/checkout@v2
+      - name: build container image and push to registry
+        uses: docker/build-push-action@v1
+        with: 
+          username: ${{ secrets.My_Secret }}
+          password: ${{ secrets.My_Secret }}
+          repository: actionsworkshop.azurecr.io/githubactionsworkshop
+          tags: latest, ${{github.sha}}
