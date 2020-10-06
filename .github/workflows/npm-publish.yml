@@ -24,3 +24,21 @@ jobs:
           login-server: actionworkshops.azurecr.io
           repository: actionsworkshop.azurecr.io/githubactionsworkshop
           tags: latest, ${{github.sha}}
+          
+  deploy: 
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: azure/login@1.1
+        with: 
+          creds: ${{ secrets.Azure_Credentials}}
+          
+      - uses: 'azure/aci-deploy@v1'
+        id: aci-deploy
+        with:
+          resource-group: devopsdayams
+          dns-name-label: wallofzen3
+          image: ntrogh/wallofzen1:${{ github.sha}}
+          name: ntwallofzen3
+          location: 'west europe'
+          environment-varibles: BASE_URL=HTTPS//devopsdaysams.azurewebsites.net/api/AddToWall
